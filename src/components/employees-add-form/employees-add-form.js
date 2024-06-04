@@ -19,11 +19,30 @@ class EmployeesAddForm extends Component {
 
     onFormSubmit = (e) => {
         e.preventDefault();
-        this.props.onAdd(this.state.name, this.state.salary);
-        this.setState({
-            name: '',
-            salary: ''
-        })
+        const name = document.querySelector(".form-control[name='name']");
+        const salary = document.querySelector(".form-control[name='salary']");
+
+        if (this.state.name.length >= 3 && this.state.salary > 0) {
+            name.style.backgroundColor = 'white';
+            salary.style.backgroundColor = 'white';
+            this.props.onAdd(this.state.name, this.state.salary);
+            this.setState({
+                name: '',
+                salary: ''
+            })
+        } else {
+            if (this.state.name.length < 3) {
+                name.style.backgroundColor = 'red';
+            } else {
+                name.style.backgroundColor = 'white';
+            }
+
+            if (this.state.salary <= 0) {
+                salary.style.backgroundColor = 'red';
+            } else {
+                salary.style.backgroundColor = 'white';
+            }
+        }
     }
 
     render() {
