@@ -14,9 +14,9 @@ class App extends Component {
     super(props);
     this.state = {
       data: [
-        {name: "John Smith", salary: 800, increase: true, id: 1},
-        {name: "Klara Burton", salary: 3000, increase: true, id: 2},
-        {name: "Semuel Pablo", salary: 15000, increase: false, id: 3}
+        {name: "John Smith", salary: 800, increase: false, rise: true, id: 1},
+        {name: "Klara Burton", salary: 3000, increase: true, rise: false, id: 2},
+        {name: "Semuel Pablo", salary: 15000, increase: false, rise: false, id: 3}
       ]
     }
     this.maxId = 4;
@@ -42,27 +42,61 @@ class App extends Component {
       name, 
       salary,
       increase: false,
+      rise: false,
       id: this.maxId++
   }
-  this.setState(({data}) => {
+    this.setState(({data}) => {
       const newArr = [...data, newItem];
       return {
           data: newArr
       }
-  });
-}
+    });
+  }
+
+  onToggleIncrease = (id) => {
+    // this.setState(({data}) => {
+    //   const index = data.findIndex(elem => elem.id === id);
+    //   const oldItem = data[index];
+    //   const newItem = {...oldItem, increase: !oldItem.increase};
+    //   const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)];
+
+    //   return {
+    //       data: newArr
+    //   }
+    // });
+
+    this.setState(({data}) => ({
+      data: data.map(item => {
+        if (item.id === id) {
+          return {...item, increase: !item.increase}
+        }
+        return item;
+      })
+    }));
+  }
+
+  onToggleRise = (id) => {
+    console.log(`rise ${id}`)
+  }
 
   render() {
     return (
       <div className="app">
-          <AppInfo />
+          <AppInfo
+            employeeCount={this.state.data.length}
+            onIncreaseCount={this.state.data.filter(elem => elem.increase === true).length} />
 
           <div className="search-panel">
               <SearchPanel/>
               <AppFilter/>
           </div>
 
-          <EmployeesList onDelete={this.deleteItem} data={this.state.data}/>
+          <EmployeesList
+            onDelete={this.deleteItem}
+            data={this.state.data}
+            onToggleIncrease={this.onToggleIncrease}
+            onToggleRise={this.onToggleRise}
+          />
           <EmployeesAddForm onAdd={this.addItem}/>
       </div>
     );
