@@ -113,6 +113,10 @@ class App extends Component {
     }
   }
 
+  onFilterSelect = (filter) => {
+    this.setState({filter})
+  }
+
   render() {
     const {data, searchWord, filter} = this.state;
     const employeeCount = this.state.data.length;
@@ -127,7 +131,7 @@ class App extends Component {
 
           <div className="search-panel">
               <SearchPanel onUpdateSearch={this.onUpdateSearch}/>
-              <AppFilter filter={filter}/>
+              <AppFilter filter={filter} onFilterSelect={this.onFilterSelect}/>
           </div>
 
           <EmployeesList
