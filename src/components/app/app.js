@@ -18,7 +18,8 @@ class App extends Component {
         {name: "Klara Burton", salary: 3000, increase: true, rise: false, id: 2},
         {name: "Semuel Pablo", salary: 15000, increase: false, rise: false, id: 3}
       ],
-      searchWord: ''
+      searchWord: '',
+      filter: 'all'
     }
     this.maxId = 4;
   }
@@ -101,11 +102,22 @@ class App extends Component {
     this.setState({searchWord: searchWord})
   }
 
+  filterPost = (items, filter) => {
+    switch (filter) {
+      case 'rise':
+        return items.filter(item => item.rise);
+      case 'moreThan1000':
+        return items.filter(item => item.salary > 1000);
+      default:
+        return items; 
+    }
+  }
+
   render() {
-    const {data, searchWord} = this.state;
+    const {data, searchWord, filter} = this.state;
     const employeeCount = this.state.data.length;
     const onIncreaseCount = this.state.data.filter(elem => elem.increase === true).length;
-    const searchData = this.searchEmp(data, searchWord);
+    const searchData = this.filterPost(this.searchEmp(data, searchWord), filter);
 
     return (
       <div className="app">
@@ -115,7 +127,7 @@ class App extends Component {
 
           <div className="search-panel">
               <SearchPanel onUpdateSearch={this.onUpdateSearch}/>
-              <AppFilter/>
+              <AppFilter filter={filter}/>
           </div>
 
           <EmployeesList
